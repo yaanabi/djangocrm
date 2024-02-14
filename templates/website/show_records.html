@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  {% if user.is_authenticated %}
+    <div class="container-fluid">
+      <form class="d-flex" role="search" action="{% url 'show_records' %}" method="GET">
+        <input class="form-control me-2" name="q" type="search" placeholder="Search" aria-label="Search" />
+        <button class="btn btn-outline-primary" type="submit">Search</button>
+      </form>
+    </div>
+
+    <table class="table table-hover">
+      <thead class="table-primary">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">First name</th>
+          <th scope="col">Last name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Phone</th>
+          <th scope="col">Adress</th>
+          <th scope="col">City</th>
+          <th scope="col">Zipcode</th>
+          <th scope="col">Created at</th>
+          <th scope="col">ID</th>
+          <th></th>
+        </tr>
+      </thead>
+      {% for record in records %}
+        <tbody>
+          <th>{{ forloop.counter }}</th>
+          <th>{{ record.first_name }}</th>
+          <th>{{ record.last_name }}</th>
+          <th>{{ record.email }}</th>
+          <th>{{ record.phone }}</th>
+          <th>{{ record.adress }}</th>
+          <th>{{ record.city }}</th>
+          <th>{{ record.zipcode }}</th>
+          <th>{{ record.created_at }}</th>
+          <th>{{ record.pk }}</th>
+          <th>
+            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modal{{forloop.counter}}">Delete</button>
+          </th>
+        </tbody>
+        <div class="modal fade" id="modal{{forloop.counter}}" tabindex="-1" aria-labelledby="modal{{forloop.counter}}" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modal{{forloop.counter}}">Delete confirmation</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">Are you sure you want to delete {{ record.first_name }}'s record?</div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </table>
+  {% else %}
+    <h2>Please <a href="{% url 'login' %}">login</a> first.</h2>
+  {% endif %}
+{% endblock %}
